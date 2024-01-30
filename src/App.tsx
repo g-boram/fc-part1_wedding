@@ -1,12 +1,20 @@
 import classNames from 'classnames/bind'
 import { useEffect, useState } from 'react'
+
 import styles from './App.module.scss'
+
 import FullScreenMessage from './components/shared/FullScreenMessage'
+
+import Heading from './components/sections/Heading'
+import Video from './components/sections/Video'
+
+import { Wedding } from './models/wedding'
+import ImageGallery from './components/sections/ImageGallery'
 
 const cx = classNames.bind(styles)
 
 function App() {
-  const [wedding, setWedding] = useState(null) // 데이터
+  const [wedding, setWedding] = useState<Wedding | null>(null) // 데이터
   const [loading, setLoading] = useState(false) // 로딩
   const [error, setError] = useState(false) // 에러
 
@@ -42,8 +50,19 @@ function App() {
   if (error) {
     return <FullScreenMessage type="error" />
   }
+  if (wedding == null) {
+    return null
+  }
+  const { date, galleryImages } = wedding
 
-  return <div className={cx('container')}>{JSON.stringify(wedding)}</div>
+  return (
+    <div className={cx('container')}>
+      <Heading date={date} />
+      <Video />
+      <ImageGallery images={galleryImages} />
+      {JSON.stringify(wedding)}
+    </div>
+  )
 }
 
 export default App
