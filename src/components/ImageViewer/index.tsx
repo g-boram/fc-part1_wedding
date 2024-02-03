@@ -1,9 +1,14 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
+
 import classNames from 'classnames/bind'
+
 import 'swiper/css'
-import './swiper.css'
+
 import styles from './ImageViewer.module.scss'
-import Dimmed from '@/components/shared/Dimmed'
+
+import './swiper.css'
+import Dimmed from '../shared/Dimmed'
+import generateImageUrl from '@/utils/generateImageUrl'
 
 const cx = classNames.bind(styles)
 
@@ -34,7 +39,22 @@ function ImageViewer({
         {images.map((src, idx) => {
           return (
             <SwiperSlide key={idx}>
-              <img src={src} alt="이미지 뷰어" />
+              <picture>
+                <source
+                  srcSet={generateImageUrl({
+                    filename: src,
+                    format: 'webp',
+                  })}
+                  type="image/webp"
+                />
+                <img
+                  src={generateImageUrl({
+                    filename: src,
+                    format: 'jpg',
+                  })}
+                  alt="이미지"
+                />
+              </picture>
             </SwiperSlide>
           )
         })}
@@ -53,11 +73,14 @@ function CloseButton({
   return (
     <svg
       className={className}
+      id="Icons"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
       onClick={onClose}
     >
-      <path d="M6.2253 4.81108C5.83477 4.42056 5.20161 4.42056 4.81108 4.81108C4.42056 5.20161 4.42056 5.83477 4.81108 6.2253L10.5858 12L4.81114 17.7747C4.42062 18.1652 4.42062 18.7984 4.81114 19.1889C5.20167 19.5794 5.83483 19.5794 6.22535 19.1889L12 13.4142L17.7747 19.1889C18.1652 19.5794 18.7984 19.5794 19.1889 19.1889C19.5794 18.7984 19.5794 18.1652 19.1889 17.7747L13.4142 12L19.189 6.2253C19.5795 5.83477 19.5795 5.20161 19.189 4.81108C18.7985 4.42056 18.1653 4.42056 17.7748 4.81108L12 10.5858L6.2253 4.81108Z" />
+      <defs></defs>
+      <path d="M12,0A12,12,0,1,0,24,12,12.013,12.013,0,0,0,12,0Zm0,22A10,10,0,1,1,22,12,10.011,10.011,0,0,1,12,22Z" />
+      <path d="M16.707,7.293a1,1,0,0,0-1.414,0L12,10.586,8.707,7.293A1,1,0,1,0,7.293,8.707L10.586,12,7.293,15.293a1,1,0,1,0,1.414,1.414L12,13.414l3.293,3.293a1,1,0,0,0,1.414-1.414L13.414,12l3.293-3.293A1,1,0,0,0,16.707,7.293Z" />
     </svg>
   )
 }
